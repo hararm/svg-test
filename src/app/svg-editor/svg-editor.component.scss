@@ -1,0 +1,32 @@
+app-svg-editor {
+  display: flex;
+  margin: 30px;
+  flex-direction: column;
+  border: 1px solid lightgrey;
+  border-radius: 5px;
+  padding: 20px;
+}
+
+.main-svg {
+  fill: #fff;
+  border: 1px solid lightgray;
+  margin: 10px;
+
+}
+.body:hover {
+  fill: red;
+  fill-opacity: 1;
+}
+/*.main-svg path:hover {
+  fill: red;
+}*/
+
+.main-svg .active {
+  stroke: green;
+}
+
+
+.main-svg .active {
+  stroke: red;
+}
+

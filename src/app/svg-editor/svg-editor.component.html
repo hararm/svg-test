@@ -1,0 +1,15 @@
+<div style="display: flex; justify-content: space-evenly; align-content: center">
+    <label  for="select_mode">Select Mode:</label>
+    <select id="select_mode" (change)="onModeChanged($event)">
+        <option value="dots">Set Dots</option>
+        <option value="draw">Draw</option>
+    </select>
+    <label for="stroke_color">Select Color:</label>
+    <input id="stroke_color" type="color" (change)="onStrokeColorChange($event)">
+    <label for="stroke_width">Select Width:</label>
+    <input id="stroke_width" type="number"  value= "1"  (change)="onStrokeWidthChange($event)">
+</div>
+<div #wrapper class="main-svg" [innerHTML]="svgSafe" (click)="action($event)"></div>
+<div>
+    <button type="button" (click)="onClearAll()">Clear</button>
+</div>
