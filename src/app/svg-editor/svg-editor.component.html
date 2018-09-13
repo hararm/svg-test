@@ -9,7 +9,7 @@
     <label for="stroke_width">Select Width:</label>
     <input id="stroke_width" type="number"  value= "1"  (change)="onStrokeWidthChange($event)">
 </div>
-<div #wrapper class="main-svg" [innerHTML]="svgSafe" (click)="action($event)"></div>
+<div #mainSvg class="main-svg" [innerHTML]="svgSafe" (click)="action($event)"></div>
 <div>
     <button type="button" (click)="onClearAll()">Clear</button>
 </div>

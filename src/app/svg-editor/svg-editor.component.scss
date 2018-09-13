@@ -11,8 +11,16 @@ app-svg-editor {
   fill: #fff;
   border: 1px solid lightgray;
   margin: 10px;
+  position: relative;
 
 }
+.new-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+
 .body:hover {
   fill: red;
   fill-opacity: 1;

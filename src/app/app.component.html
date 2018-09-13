@@ -1,4 +1,7 @@
-<app-svg-editor [(svg)]="xmlData" [scale]="scale"></app-svg-editor>
+<app-svg-editor [svgTemplateLayerString]="originalTemplateSvg" [svgDrawingLayerString]="svgFromStorage" [scale]="scale"></app-svg-editor>
 <button type="button" (click)="onZoomIn()">ZoomIn</button>
 <button type="button" (click)="onZoomOut()">ZoomOut</button>
+
+<button type="button" (click)="onAddSvg()">Add Svg Layer</button>
+
 
