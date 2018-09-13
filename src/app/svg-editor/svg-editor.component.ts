@@ -55,12 +55,12 @@ export class SvgEditorComponent implements OnInit, OnChanges, AfterViewInit {
         } else if (svgDrawChanges && svgDrawChanges.currentValue) {
             const new_svg = this.mainSvg.nativeElement.querySelector('#new-svg');
             new_svg.outerHTML = this.svgDrawingLayerString.svg;
-            this.synchZoom();
+            this.syncZoom();
         }
         this.ref.markForCheck();
     }
 
-    action(event) {
+    setDotsAction(event) {
         if (this.draw_mode === 'dots') {
             const states = event.target.closest('.states');
             if (states) {
@@ -128,15 +128,21 @@ export class SvgEditorComponent implements OnInit, OnChanges, AfterViewInit {
     onMouseDown(event) {
         if (this.draw_mode === 'draw') {
             const svg = this.mainSvg.nativeElement.querySelector('#new-svg');
-            this.stop = false;
-            this.path = document.createElementNS(xmlns, 'path');
-            this.path.setAttribute('fill-opacity', '0');
-            this.path.setAttribute('class', 'drawings');
-            this.path.setAttribute('stroke', this.default_stroke_color);
-            this.path.setAttribute('stroke-width', this.default_strokeWidth.toString());
-            this.path.setAttribute('d', 'M' + this.cursor.x + ' ' + this.cursor.y);
-            svg.appendChild(this.path);
-            this.draw();
+            const offset = svg.getBoundingClientRect();
+            if (offset.x <= event.x  && event.x <= offset.x + offset.width &&
+                offset.y <= event.y && event.y <= offset.y + offset.height) {
+                this.stop = false;
+                const g = document.createElementNS(xmlns, 'g');
+                g.classList.add('draw-path');
+                this.path = document.createElementNS(xmlns, 'path');
+                this.path.setAttribute('fill-opacity', '0');
+                this.path.setAttribute('stroke', this.default_stroke_color);
+                this.path.setAttribute('stroke-width', this.default_strokeWidth.toString());
+                this.path.setAttribute('d', 'M' + this.cursor.x + ' ' + this.cursor.y);
+                g.appendChild(this.path);
+                svg.appendChild(g);
+                this.draw();
+            }
         }
     }
 
@@ -169,6 +175,23 @@ export class SvgEditorComponent implements OnInit, OnChanges, AfterViewInit {
         this.default_strokeWidth = event.target.value;
     }
 
+    onUndo() {
+        if (this.draw_mode === 'dots') {
+            const svg = this.mainSvg.nativeElement.querySelector('#new-svg');
+            const states = svg.getElementsByClassName('states');
+            if (states  && states.length > 0) {
+                states[states.length - 1].parentNode.removeChild(states[states.length - 1]);
+            }
+
+        } else if (this.draw_mode === 'draw') {
+            const svg = this.mainSvg.nativeElement.querySelector('#new-svg');
+            const paths = svg.getElementsByClassName('draw-path');
+            if (paths && paths.length > 0) {
+                paths[paths.length - 1].parentNode.removeChild(paths[paths.length - 1]);
+            }
+        }
+    }
+
     onClearAll() {
         if (this.draw_mode === 'dots') {
             const svg = this.mainSvg.nativeElement.querySelector('#new-svg');
@@ -180,10 +203,10 @@ export class SvgEditorComponent implements OnInit, OnChanges, AfterViewInit {
             }
         } else if (this.draw_mode === 'draw') {
             const svg = this.mainSvg.nativeElement.querySelector('#new-svg');
-            const drawings = svg.getElementsByClassName('drawings');
-            if (drawings) {
-                while (drawings.length > 0) {
-                    drawings[0].parentNode.removeChild(drawings[0]);
+            const paths = svg.getElementsByClassName('draw-path');
+            if (paths) {
+                while (paths.length > 0) {
+                    paths[0].parentNode.removeChild(paths[0]);
                 }
             }
         }
@@ -203,7 +226,7 @@ export class SvgEditorComponent implements OnInit, OnChanges, AfterViewInit {
         this.createDrawingLayer();
     }
 
-    private synchZoom() {
+    private syncZoom() {
         const svg = this.mainSvg.nativeElement.querySelector('svg');
         const drawSvg = this.mainSvg.nativeElement.querySelector('#new-svg');
         const transform = svg.getAttribute('transform');
